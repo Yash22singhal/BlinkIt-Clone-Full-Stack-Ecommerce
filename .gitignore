@@ -1,0 +1,31 @@
+# Node.js dependencies and logs (for both client and server)
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Environment variables
+.env
+
+# Logs
+*.log
+logs/
+
+# Build directories
+/build
+/dist
+
+# IDE/editor config files
+.vscode/
+.idea/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Client-specific (React, Vue, etc.) ignore rules
+/client/build/    # For React/Vue app build output
+/client/.env      # If you have a separate client .env file
+
+# Server-specific ignore rules (e.g., server logs or build files)
+/server/.env      # If you have a separate server .env file
+/server/logs/     # Server-side log files
