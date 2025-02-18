@@ -6,11 +6,15 @@ export default {
   ],
   theme: {
     extend: {
+      perspective:{
+        '1500': '1500px'
+      },
       colors : {
         "primary-200" : "#ffbf00",
         "primary-100" : "#ffc929",
         "secondary-200" : "#00b050",
-        "secondary-100" : "#0b1a78"
+        "secondary-100" : "#0b1a78",
+
       }
     },
   },

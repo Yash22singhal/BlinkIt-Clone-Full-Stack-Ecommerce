@@ -228,3 +228,125 @@ const ProductDisplayPage = () => {
 }
 
 export default ProductDisplayPage
+
+
+
+
+
+
+
+
+
+
+// import React, { useState } from 'react'
+// import { DisplayPriceInRupees } from '../utils/DisplayPriceInRupees'
+// import { valideURLConvert } from '../utils/valideURLConvert'
+// import { pricewithDiscount } from '../utils/PriceWithDiscount'
+// import AddToCartButton from '../components/AddToCartButton'
+
+// const ProductDetailPage = ({ data }) => {
+//   const url = `/product/${valideURLConvert(data.name)}-${data._id}`
+
+//   // const [selectedVariant, setSelectedVariant] = useState({
+//   //   name: data.variants[0]?.name,
+//   //   price: data.variants[0]?.price,
+//   //   discount: data.variants[0]?.discount,
+//   //   quantity: data.variants[0]?.quantity,
+//   // })
+
+//   const [selectedVariant, setSelectedVariant] = useState(() => {
+//     const firstVariant = data.variants?.[0] || {}; // Ensure a fallback object
+//     return {
+//       name: firstVariant.name || '', 
+//       price: firstVariant.price || 0,
+//       discount: firstVariant.discount || 0,
+//       quantity: firstVariant.quantity || 0,
+//     };
+//   });
+  
+
+//   // Handle variant change (size/color)
+//   // const handleVariantChange = (e, type) => {
+//   //   const selectedValue = e.target.value
+//   //   const updatedVariant = { ...selectedVariant }
+
+//   //   if (type === 'name') {
+//   //     updatedVariant.name = selectedValue
+//   //   }
+
+//   //   // Find the matching variant based on size and color
+//   //   const variant = data.variants.find(variant =>
+//   //     variant.name === updatedVariant.name 
+//   //   )
+
+//   //   // Update price and stock based on selected variant
+//   //   if (variant) {
+//   //     updatedVariant.price = variant.price
+//   //     updatedVariant.discount = variant.discount
+//   //     updatedVariant.quantity = variant.quantity
+//   //   }
+
+//   //   setSelectedVariant(updatedVariant)
+//   // }
+
+//   return (
+//     <div className='container mx-auto py-6'>
+//       <div className='grid grid-cols-1 lg:grid-cols-2 gap-8'>
+//         {/* Product Image */}
+//         <div className='min-h-20 w-full max-h-24 lg:max-h-32 rounded overflow-hidden'>
+//           <img 
+//             src={data.image[0]} 
+//             className='w-full h-full object-scale-down lg:scale-125' 
+//           />
+//         </div>
+
+//         {/* Product Details */}
+//         <div>
+//           <div className='font-medium text-2xl mb-2'>{data.name}</div>
+//           <div className='text-sm text-gray-600 mb-2'>{data.unit}</div>
+
+//           {/* Variant Selectors */}
+//           <div className='mb-4'>
+//             <div className='mb-2'>
+//               <label className='text-sm font-semibold'>Select Type:</label>
+//               <select
+//                 value={selectedVariant.name}
+//                 onChange={(e) => handleVariantChange(e, 'name')}
+//                 className="bg-blue-50 p-1 border rounded"
+//               >
+//                   {data.variants?.map((variant, index) => (
+//                     <option key={index} value={variant.name}>
+//                       {variant.name}
+//                     </option>
+//                   ))}
+
+                
+//               </select>
+//             </div>
+//           </div>
+
+//           {/* Price and Stock */}
+//           <div className='flex items-center justify-between gap-1 lg:gap-3 text-xl font-semibold'>
+//             <div>
+//               {DisplayPriceInRupees(pricewithDiscount(selectedVariant.price, data.discount))}
+//             </div>
+//             {selectedVariant.stock === 0 ? (
+//               <p className='text-red-500 text-sm'>Out of stock</p>
+//             ) : (
+//               <AddToCartButton data={data} selectedVariant={selectedVariant} />
+//             )}
+//           </div>
+
+//           {/* Discount Badge */}
+//           {Boolean(data.discount) && (
+//             <p className='text-green-600 bg-green-100 px-2 w-fit text-xs rounded-full mt-2'>
+//               {data.discount}% Discount
+//             </p>
+//           )}
+//         </div>
+//       </div>
+//     </div>
+//   )
+// }
+
+// export default ProductDetailPage

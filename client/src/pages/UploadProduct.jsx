@@ -435,3 +435,384 @@ const UploadProduct = () => {
 }
 
 export default UploadProduct
+
+
+
+
+
+
+
+// import React, { useState, useEffect } from 'react';
+// import { FaCloudUploadAlt } from "react-icons/fa";
+// import uploadImage from '../utils/UploadImage';
+// import Loading from '../components/Loading';
+// import ViewImage from '../components/ViewImage';
+// import { MdDelete } from "react-icons/md";
+// import { useSelector } from 'react-redux';
+// import { IoClose } from "react-icons/io5";
+// import AddFieldComponent from '../components/AddFieldComponent';
+// import Axios from '../utils/Axios';
+// import SummaryApi from '../common/SummaryApi';
+// import AxiosToastError from '../utils/AxiosToastError';
+// import successAlert from '../utils/SuccessAlert';
+
+// const UploadProduct = () => {
+//   const [data, setData] = useState({
+//       name: "",
+//       image: [],
+//       category: [],
+//       subCategory: [],
+//       unit: "",
+//       stock: "",
+//       price: "",
+//       discount: "",
+//       description: "",
+//       more_details: {},
+//       variants: []
+//   });
+
+//   const [imageLoading, setImageLoading] = useState(false);
+//   const [ViewImageURL, setViewImageURL] = useState("");
+//   const allCategory = useSelector(state => state.product.allCategory);
+//   const [selectCategory, setSelectCategory] = useState("");
+//   const [selectSubCategory, setSelectSubCategory] = useState("");
+//   const allSubCategory = useSelector(state => state.product.allSubCategory);
+  
+//   const [openAddField, setOpenAddField] = useState(false);
+//   const [fieldName, setFieldName] = useState("");
+
+//   const handleChange = (e) => {
+//     const { name, value } = e.target;
+//     setData(prev => ({
+//       ...prev,
+//       [name]: value
+//     }));
+//   };
+
+//   const handleUploadImage = async (e) => {
+//     const file = e.target.files[0];
+//     if (!file) {
+//       return;
+//     }
+//     setImageLoading(true);
+//     const response = await uploadImage(file);
+//     const { data: ImageResponse } = response;
+//     const imageUrl = ImageResponse.data.url;
+
+//     setData(prev => ({
+//       ...prev,
+//       image: [...prev.image, imageUrl]
+//     }));
+//     setImageLoading(false);
+//   };
+
+//   const handleDeleteImage = async (index) => {
+//     data.image.splice(index, 1);
+//     setData(prev => ({ ...prev }));
+//   };
+
+//   const handleRemoveCategory = async (index) => {
+//     data.category.splice(index, 1);
+//     setData(prev => ({ ...prev }));
+//   };
+
+//   const handleRemoveSubCategory = async (index) => {
+//     data.subCategory.splice(index, 1);
+//     setData(prev => ({ ...prev }));
+//   };
+
+//   const handleAddField = () => {
+//     setData(prev => ({
+//       ...prev,
+//       more_details: {
+//         ...prev.more_details,
+//         [fieldName]: ""
+//       }
+//     }));
+//     setFieldName("");
+//     setOpenAddField(false);
+//   };
+
+//   const handleAddVariant = () => {
+//     setData(prev => ({
+//       ...prev,
+//       variants: [
+//         ...prev.variants,
+//         { size: "", color: "", price: "", stock: "" }
+//       ]
+//     }));
+//   };
+
+//   const handleVariantChange = (index, e) => {
+//     const { name, value } = e.target;
+//     const updatedVariants = [...data.variants];
+//     updatedVariants[index][name] = value;
+//     setData(prev => ({ ...prev, variants: updatedVariants }));
+//   };
+
+//   const handleSubmit = async (e) => {
+//     e.preventDefault();
+//     try {
+//       const response = await Axios({
+//         ...SummaryApi.createProduct,
+//         data: data
+//       });
+//       const { data: responseData } = response;
+//       if (responseData.success) {
+//         successAlert(responseData.message);
+//         setData({
+//           name: "",
+//           image: [],
+//           category: [],
+//           subCategory: [],
+//           unit: "",
+//           stock: "",
+//           price: "",
+//           discount: "",
+//           description: "",
+//           more_details: {},
+//           variants: []
+//         });
+//       }
+//     } catch (error) {
+//       AxiosToastError(error);
+//     }
+//   };
+
+//   return (
+//     <section>
+//         <div className='p-2 bg-white shadow-md flex items-center justify-between'>
+//             <h2 className='font-semibold'>Upload Product</h2>
+//         </div>
+//         <div className='grid p-3'>
+//             <form className='grid gap-4' onSubmit={handleSubmit}>
+//                 <div className='grid gap-1'>
+//                   <label htmlFor='name' className='font-medium'>Name</label>
+//                   <input 
+//                     id='name'
+//                     type='text'
+//                     placeholder='Enter product name'
+//                     name='name'
+//                     value={data.name}
+//                     onChange={handleChange}
+//                     required
+//                     className='bg-blue-50 p-2 outline-none border focus-within:border-primary-200 rounded'
+//                   />
+//                 </div>
+//                 <div className='grid gap-1'>
+//                   <label htmlFor='description' className='font-medium'>Description</label>
+//                   <textarea 
+//                     id='description'
+//                     placeholder='Enter product description'
+//                     name='description'
+//                     value={data.description}
+//                     onChange={handleChange}
+//                     required
+//                     rows={3}
+//                     className='bg-blue-50 p-2 outline-none border focus-within:border-primary-200 rounded resize-none'
+//                   />
+//                 </div>
+//                 <div>
+//                     <p className='font-medium'>Image</p>
+//                     <div>
+//                       <label htmlFor='productImage' className='bg-blue-50 h-24 border rounded flex justify-center items-center cursor-pointer'>
+//                           <div className='text-center flex justify-center items-center flex-col'>
+//                             {imageLoading ? <Loading /> : (
+//                               <>
+//                                 <FaCloudUploadAlt size={35} />
+//                                 <p>Upload Image</p>
+//                               </>
+//                             )}
+//                           </div>
+//                           <input 
+//                             type='file'
+//                             id='productImage'
+//                             className='hidden'
+//                             accept='image/*'
+//                             onChange={handleUploadImage}
+//                           />
+//                       </label>
+//                       <div className='flex flex-wrap gap-4'>
+//                         {data.image.map((img, index) => (
+//                           <div key={img + index} className='h-20 mt-1 w-20 min-w-20 bg-blue-50 border relative group'>
+//                             <img
+//                               src={img}
+//                               alt={img}
+//                               className='w-full h-full object-scale-down cursor-pointer' 
+//                               onClick={() => setViewImageURL(img)}
+//                             />
+//                             <div onClick={() => handleDeleteImage(index)} className='absolute bottom-0 right-0 p-1 bg-red-600 hover:bg-red-600 rounded text-white hidden group-hover:block cursor-pointer'>
+//                               <MdDelete />
+//                             </div>
+//                           </div>
+//                         ))}
+//                       </div>
+//                     </div>
+//                 </div>
+//                 <div className='grid gap-1'>
+//                   <label className='font-medium'>Category</label>
+//                   <div>
+//                     <select
+//                       className='bg-blue-50 border w-full p-2 rounded'
+//                       value={selectCategory}
+//                       onChange={(e) => {
+//                         const value = e.target.value;
+//                         const category = allCategory.find(el => el._id === value);
+//                         setData(prev => ({
+//                           ...prev,
+//                           category: [...prev.category, category]
+//                         }));
+//                         setSelectCategory("");
+//                       }}
+//                     >
+//                       <option value={""}>Select Category</option>
+//                       {allCategory.map((c, index) => (
+//                         <option key={c._id} value={c?._id}>{c.name}</option>
+//                       ))}
+//                     </select>
+//                     <div className='flex flex-wrap gap-3'>
+//                       {data.category.map((c, index) => (
+//                         <div key={c._id + index + "productsection"} className='text-sm flex items-center gap-1 bg-blue-50 mt-2'>
+//                           <p>{c.name}</p>
+//                           <div className='hover:text-red-500 cursor-pointer' onClick={() => handleRemoveCategory(index)}>
+//                             <IoClose size={20} />
+//                           </div>
+//                         </div>
+//                       ))}
+//                     </div>
+//                   </div>
+//                 </div>
+//                 <div className='grid gap-1'>
+//                   <label className='font-medium'>Sub Category</label>
+//                   <div>
+//                     <select
+//                       className='bg-blue-50 border w-full p-2 rounded'
+//                       value={selectSubCategory}
+//                       onChange={(e) => {
+//                         const value = e.target.value;
+//                         const subCategory = allSubCategory.find(el => el._id === value);
+//                         setData(prev => ({
+//                           ...prev,
+//                           subCategory: [...prev.subCategory, subCategory]
+//                         }));
+//                         setSelectSubCategory("");
+//                       }}
+//                     >
+//                       <option value={""}>Select Sub Category</option>
+//                       {allSubCategory.map((c, index) => (
+//                         <option key={c._id} value={c?._id}>{c.name}</option>
+//                       ))}
+//                     </select>
+//                     <div className='flex flex-wrap gap-3'>
+//                       {data.subCategory.map((c, index) => (
+//                         <div key={c._id + index + "productsection"} className='text-sm flex items-center gap-1 bg-blue-50 mt-2'>
+//                           <p>{c.name}</p>
+//                           <div className='hover:text-red-500 cursor-pointer' onClick={() => handleRemoveSubCategory(index)}>
+//                             <IoClose size={20} />
+//                           </div>
+//                         </div>
+//                       ))}
+//                     </div>
+//                   </div>
+//                 </div>
+//                 <div className='grid gap-1'>
+//                   <label htmlFor='unit' className='font-medium'>Unit</label>
+//                   <input 
+//                     type='text'
+//                     id='unit'
+//                     name='unit'
+//                     value={data.unit}
+//                     onChange={handleChange}
+//                     required
+//                     className='bg-blue-50 p-2 outline-none border focus-within:border-primary-200 rounded'
+//                   />
+//                 </div>
+//                 <div className='grid gap-1'>
+//                   <label htmlFor='stock' className='font-medium'>Stock</label>
+//                   <input 
+//                     type='number'
+//                     id='stock'
+//                     name='stock'
+//                     value={data.stock}
+//                     onChange={handleChange}
+//                     required
+//                     className='bg-blue-50 p-2 outline-none border focus-within:border-primary-200 rounded'
+//                   />
+//                 </div>
+//                 <div className='grid gap-1'>
+//                   <label htmlFor='price' className='font-medium'>Price</label>
+//                   <input 
+//                     type='number'
+//                     id='price'
+//                     name='price'
+//                     value={data.price}
+//                     onChange={handleChange}
+//                     required
+//                     className='bg-blue-50 p-2 outline-none border focus-within:border-primary-200 rounded'
+//                   />
+//                 </div>
+//                 <div className='grid gap-1'>
+//                   <label htmlFor='discount' className='font-medium'>Discount</label>
+//                   <input 
+//                     type='number'
+//                     id='discount'
+//                     name='discount'
+//                     value={data.discount}
+//                     onChange={handleChange}
+//                     className='bg-blue-50 p-2 outline-none border focus-within:border-primary-200 rounded'
+//                   />
+//                 </div>
+//                 <div className='grid gap-1'>
+//                   <label htmlFor='variants' className='font-medium'>Variants</label>
+//                   <button type="button" onClick={handleAddVariant} className="bg-blue-200 p-2 rounded text-white">
+//                     Add Variant
+//                   </button>
+//                   {data.variants.map((variant, index) => (
+//                     <div key={index} className="mt-3">
+//                       <input
+//                         type="text"
+//                         placeholder="Name"
+//                         name="name"
+//                         value={variant.name}
+//                         onChange={(e) => handleVariantChange(index, e)}
+//                         className="bg-blue-50 p-2 outline-none border rounded"
+//                       />
+//                       <input
+//                         type="number"
+//                         placeholder="Price"
+//                         name="price"
+//                         value={variant.price}
+//                         onChange={(e) => handleVariantChange(index, e)}
+//                         className="bg-blue-50 p-2 outline-none border rounded"
+//                       />
+//                       <input
+//                         type="number"
+//                         placeholder="Discount"
+//                         name="discount"
+//                         value={variant.discount}
+//                         onChange={(e) => handleVariantChange(index, e)}
+//                         className="bg-blue-50 p-2 outline-none border rounded"
+//                       />
+//                       <input
+//                         type="number"
+//                         placeholder="Quantity"
+//                         name="quantity"
+//                         value={variant.quantity}
+//                         onChange={(e) => handleVariantChange(index, e)}
+//                         className="bg-blue-50 p-2 outline-none border rounded"
+//                       />
+//                     </div>
+//                   ))}
+//                 </div>
+//                 <div>
+//                   <button type="submit" className="bg-blue-600 text-white p-2 rounded">
+//                     Upload Product
+//                   </button>
+//                 </div>
+//             </form>
+//         </div>
+//     </section>
+//   );
+// };
+
+// export default UploadProduct;

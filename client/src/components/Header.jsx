@@ -24,6 +24,7 @@ const Header = () => {
     // const [totalQty,setTotalQty] = useState(0)
     const { totalPrice, totalQty} = useGlobalContext()
     const [openCartSection,setOpenCartSection] = useState(false)
+    const [isScrolled, setIsScrolled] = useState(false);
  
     const redirectToLoginPage = ()=>{
         navigate("/login")
@@ -42,6 +43,14 @@ const Header = () => {
         navigate("/user")
     }
 
+    useEffect(() => {
+        const handleScroll = () => {
+        setIsScrolled(window.scrollY > 50);
+        };
+        window.addEventListener('scroll', handleScroll);
+        return () => window.removeEventListener('scroll', handleScroll);
+        }, []);
+
     //total item and total price
     // useEffect(()=>{
     //     const qty = cartItem.reduce((preve,curr)=>{
@@ -57,7 +66,7 @@ const Header = () => {
     // },[cartItem])
 
   return (
-    <header className='h-24 lg:h-20 lg:shadow-md sticky top-0 z-40 flex flex-col justify-center gap-1 bg-white'>
+    <header className={`${location.pathname !== "/" ? "relative" : "fixed"} w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-white shadow-md' : 'bg-transparent' } h-24 lg:h-20 lg:shadow-md z-40 flex flex-col justify-center gap-1`}>
         {
             !(isSearchPage && isMobile) && (
                 <div className='container mx-auto flex items-center px-2 justify-between'>
@@ -99,7 +108,7 @@ const Header = () => {
                                         {
                                             user?._id ? (
                                                 <div className='relative'>
-                                                    <div onClick={()=>setOpenUserMenu(preve => !preve)} className='flex select-none items-center gap-1 cursor-pointer'>
+                                                    <div onClick={()=>setOpenUserMenu(preve => !preve)} className='flex select-none items-center gap-1 cursor-pointer text-white font-semibold'>
                                                         <p>Account</p>
                                                         {
                                                             openUserMenu ? (
@@ -122,7 +131,7 @@ const Header = () => {
                                                     
                                                 </div>
                                             ) : (
-                                                <button onClick={redirectToLoginPage} className='text-lg px-2'>Login</button>
+                                                <button onClick={redirectToLoginPage} className={`text-lg px-2 font-semibold ${isScrolled || location.pathname !== "/" ? "text-black" : "text-white"} transition-all duration-200 ease-in-out`}>Login</button>
                                             )
                                         }
                                         <button onClick={()=>setOpenCartSection(true)} className='flex items-center gap-2 bg-green-800 hover:bg-green-700 px-3 py-2 rounded text-white'>
